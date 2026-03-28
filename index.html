@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ece & Alperen - Bizim Hikayemiz</title>
+    <style>
+        /* Genel sayfa ayarları */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif;
+            color: #ffffff; /* Yazılar fotoğrafların üstünde net görünsün diye BEYAZ */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden; /* Fotoğraflar taşmasın diye */
+            position: relative;
+        }
+
+        /* --- Sağa Kaydırılabilir Sonsuz Arka Plan (YENİ) --- */
+        #background-carousel {
+            position: absolute; /* Arka planda sabitle */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* En arkaya at */
+            overflow: hidden;
+        }
+
+        .image-track {
+            display: flex; /* Yan yana diz */
+            width: 500vw; /* 5 resim x 100vw = 500vw */
+            height: 100%;
+            animation: scroll-right 40s linear infinite; /* Sonsuz kayma animasyonu */
+        }
+
+        .image-track div {
+            width: 100vw; /* Her resim 1 tam viewport genişliği */
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Sonsuz kayma için resimlerin kopyalanması (CSS-only yöntem) */
+        /* 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 */
+        .img1 { background-image: url('1.png'); }
+        .img2 { background-image: url('2.png'); }
+        .img3 { background-image: url('3.png'); }
+        .img4 { background-image: url('4.png'); }
+        .img5 { background-image: url('5.png'); }
+
+        @keyframes scroll-right {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-500vw); } /* Toplam genişlik kadar sola kaydır */
+        }
+        /* ------------------------------------- */
+
+        /* --- Karartma Katmanı (Yazı okunabilirliği için) --- */
+        #background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.45); /* Hafif siyah karartma */
+            z-index: -1; /* Slayt gösterisinin üstünde, içeriğin altında */
+        }
+
+        /* --- İçerik Konteyneri --- */
+        #content-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Başlıklar */
+        h1 {
+            font-size: 5rem;
+            margin-bottom: 5px;
+            letter-spacing: 5px;
+            font-weight: normal;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* Okunurluğu artır */
+        }
+        
+        p.subtitle {
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+            font-style: italic;
+            color: #dddddd; /* Beyaza yakın bir gri tonu */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+        }
+
+        /* Sayaç kutuları */
+        .counter-box {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .time-block {
+            background-color: rgba(223, 206, 193, 0.9); /* Yarı saydam bej renk */
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            min-width: 90px;
+        }
+
+        .time-block span {
+            display: block;
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #4a3b32; /* Kutunun içindeki sayılar koyu renk kalmalı */
+        }
+
+        .time-block label {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+            display: block;
+            color: #4a3b32;
+        }
+
+        /* Alt mesaj */
+        .message {
+            font-size: 1.7rem;
+            max-width: 800px;
+            line-height: 1.8;
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* --- Arka Plan Müziği Kontrolü (YENİ) --- */
+        #music-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(223, 206, 193, 0.9);
+            padding: 10px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        #music-container span {
+            color: #4a3b32;
+            font-size: 1rem;
+        }
+
+        #music-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #4a3b32;
+        }
+        /* ------------------------------------- */
+
+    </style>
+</head>
+<body>
+
+    <div id="background-carousel">
+        <div class="image-track">
+            <div class="img1"></div>
+            <div class="img2"></div>
+            <div class="img3"></div>
+            <div class="img4"></div>
+            <div class="img5"></div>
+            <div class="img1"></div>
+            <div class="img2"></div>
+            <div class="img3"></div>
+            <div class="img4"></div>
+            <div class="img5"></div>
+        </div>
+    </div>
+    
+    <div id="background-overlay"></div>
+    <div id="content-wrapper">
+        <h1>ECE & ALPEREN</h1>
+        <p class="subtitle">Sonsuza Dek Sürecek Hikayemiz...</p>
+
+        <div class="counter-box">
+            <div class="time-block">
+                <span id="days">0</span>
+                <label>Gün</label>
+            </div>
+            <div class="time-block">
+                <span id="hours">0</span>
+                <label>Saat</label>
+            </div>
+            <div class="time-block">
+                <span id="minutes">0</span>
+                <label>Dakika</label>
+            </div>
+            <div class="time-block">
+                <span id="seconds">0</span>
+                <label>Saniye</label>
+            </div>
+        </div>
+
+        <p class="message">
+            Aşkımız 31.07.2025'ten bugüne tam <b id="totalDays">0</b> gündür devam ediyor ve ölene kadar sürecek.
+        </p>
+    </div>
+
+    <div id="music-container">
+        <span>Arka Plan Müziği</span>
+        <button id="music-toggle">🔊</button>
+    </div>
+    
+    <audio id="background-music" src="arka_plan_muzigi.mp3" autoplay loop></audio>
+    <script>
+        // --- Sayaç Scripti (Aynen korundu) ---
+        // Başlangıç tarihimiz: 31 Temmuz 2025 (Saat 00:00:00)
+        // DİKKAT: Gerçek başlangıç tarihinizi buraya girin. Örn: "2024-05-20T00:00:00"
+        const startDate = new Date("2025-07-31T00:00:00").getTime();
+
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = now - startDate;
+
+            if (distance < 0) { return; }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+            
+            document.getElementById("totalDays").innerText = days;
+        }, 1000); // 1000 ms = 1 saniye
+
+        // --- Müzik Kontrol Scripti ---
+        const music = document.getElementById('background-music');
+        const toggle = document.getElementById('music-toggle');
+
+        toggle.addEventListener('click', function() {
+            if (music.paused) {
+                music.play();
+                toggle.textContent = '🔊'; // Hoparlör açık
+            } else {
+                music.pause();
+                toggle.textContent = '🔇'; // Hoparlör kapalı
+            }
+        });
+
+        // Çoğu tarayıcıda autoplay engellidir, bu yüzden ilk tıklamada çalması için:
+        document.addEventListener('click', function() {
+            if (music.paused && toggle.textContent === '🔊') {
+                music.play();
+            }
+        }, { once: true }); // Sadece bir kez tetiklensin
+
+    </script>
+
+</body>
+</html>
