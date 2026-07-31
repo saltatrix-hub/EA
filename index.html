@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Learn English — Premium Workbook</title>
+  <meta name="description" content="Sıfırdan A2 seviyesine, kısa dersler ve pratiklerle kolay İngilizce öğren." />
+  <meta name="theme-color" content="#172033" />
   <style>
     :root{
       --bg:#050913;
@@ -544,29 +546,30 @@
 
     @media print{body{background:#fff;color:#000}.app-frame{display:block;width:100%;margin:0;border:0;box-shadow:none;background:#fff}.sidebar,.top-grid,.toolbar,.lesson-panel,.level-section,.sticky-actions,.toast{display:none!important}.main{padding:0}.workspace{border:0;box-shadow:none;background:#fff;color:#000}.content-card,.formula,.vocab,.drill,.question,.reading-box,.bubble{break-inside:avoid;background:#fff;color:#000;border-color:#ddd}.content-card p,.small,.goal,.vocab .tr,.vocab .ex{color:#222}.answer{display:block;color:#000;border-color:#ddd;background:#f6f6f6}.workspace-head h2,.content-card h3,.question h4,.vocab strong{color:#000}}
   </style>
+  <link rel="stylesheet" href="redesign.css" />
 </head>
 <body>
   <div class="app-frame">
     <aside class="sidebar" aria-label="Ana menü">
-      <div class="brand-icon" title="Learn English">⌘</div>
-      <button class="nav-item active" data-scroll="top"><span class="nav-ico">⌂</span><span class="nav-label">Ana Sayfa</span></button>
-      <button class="nav-item" data-scroll="levels"><span class="nav-ico">▤</span><span class="nav-label">Derslerim</span></button>
-      <button class="nav-item" data-scroll="workspace"><span class="nav-ico">☑</span><span class="nav-label">Testler</span></button>
-      <button class="nav-item" data-scroll="progress"><span class="nav-ico">▥</span><span class="nav-label">İlerlemem</span></button>
-      <button class="nav-item" data-scroll="vocab"><span class="nav-ico">Aa</span><span class="nav-label">Kelime</span></button>
-      <button class="nav-item" id="resetProgress"><span class="nav-ico">⚙</span><span class="nav-label">Ayarlar</span></button>
-      <div class="streak"><strong>🔥 7</strong><span>Günlük Seri</span></div>
+      <div class="brand-icon" title="Easy English">E.</div>
+      <button class="nav-item active" data-scroll="top"><span class="nav-ico">⌂</span><span class="nav-label">Başlangıç</span></button>
+      <button class="nav-item" data-scroll="levels"><span class="nav-ico">▤</span><span class="nav-label">Dersler</span></button>
+      <button class="nav-item" data-scroll="workspace"><span class="nav-ico">✓</span><span class="nav-label">Çalışma alanı</span></button>
+      <button class="nav-item" data-scroll="progress"><span class="nav-ico">◔</span><span class="nav-label">İlerleme</span></button>
+      <button class="nav-item" data-scroll="vocab"><span class="nav-ico">Aa</span><span class="nav-label">Kelimeler</span></button>
+      <button class="nav-item" id="resetProgress"><span class="nav-ico">↺</span><span class="nav-label">Sıfırla</span></button>
+      <div class="streak"><strong>Her gün 20 dk</strong><span>Küçük adımlar, kalıcı gelişim.</span></div>
     </aside>
 
     <main class="main" id="top">
       <section class="top-grid">
         <div>
-          <div class="eyebrow">A0 → A2 Eğitim Paneli</div>
-          <h1 class="title">Learn<br>English <span class="spark">✦</span></h1>
-          <p class="subtitle">Sıfırdan başla, adım adım ilerle. Her seviye yarım saatlik ders, pratik ve bölüm sonu testi içerir.</p>
+          <div class="eyebrow">A0'DAN A2'YE · 30 ADIM</div>
+          <h1 class="title">English,<br>made easy<span class="spark">.</span></h1>
+          <p class="subtitle">Kısa anlatımlar, gerçek hayattan örnekler ve bol pratik. Nerede kaldığını düşünmeden, sıradaki küçük adımı tamamla.</p>
           <div class="hero-actions">
-            <button class="pill-btn" id="readEnglish"><span>🔊</span><span>Read in English</span></button>
-            <input class="student-input" id="studentName" placeholder="Öğrenci adı" autocomplete="off" />
+            <button class="pill-btn" id="readEnglish"><span>▶</span><span>Bugünkü derse başla</span></button>
+            <input class="student-input" id="studentName" aria-label="Adın" placeholder="Adını yaz" autocomplete="off" />
           </div>
         </div>
 
@@ -7645,6 +7648,7 @@ const COURSE = [
 
     let state = loadState();
     let currentId = Math.min(state.currentId || 1, COURSE.length);
+    let activeLessonTab = "learn";
     let voices = [];
     const el = {
       levelSections: document.getElementById("levelSections"),
@@ -7689,6 +7693,9 @@ const COURSE = [
 
       const next = event.target.closest("[data-next]");
       if (next) return goNext();
+
+      const tab = event.target.closest("[data-lesson-tab]");
+      if (tab) return switchLessonTab(tab.dataset.lessonTab);
     });
 
     document.getElementById("readEnglish").addEventListener("click", () => {
@@ -7926,29 +7933,35 @@ const COURSE = [
           </div>
           <button class="pill-btn" data-speak="${escapeAttr(lesson.reading.text)}"><span>🔊</span><span>Read in English</span></button>
         </div>
+        <nav class="lesson-tabs" aria-label="Ders bölümleri">
+          <button class="lesson-tab ${activeLessonTab === "learn" ? "active" : ""}" data-lesson-tab="learn">1 · Öğren</button>
+          <button class="lesson-tab ${activeLessonTab === "words" ? "active" : ""}" data-lesson-tab="words">2 · Kelimeler</button>
+          <button class="lesson-tab ${activeLessonTab === "practice" ? "active" : ""}" data-lesson-tab="practice">3 · Pratik</button>
+          <button class="lesson-tab ${activeLessonTab === "test" ? "active" : ""}" data-lesson-tab="test">4 · Test</button>
+        </nav>
         <div class="content-grid">
-          <section class="content-card span-4">
+          <section class="content-card span-4 lesson-pane ${activeLessonTab === "learn" ? "active" : ""}" data-pane="learn">
             <h3>🎯 Bugünün Hedefleri</h3>
             <ul class="objective-list">${lesson.objectives.map(o => `<li>${escapeHtml(o)}</li>`).join("")}</ul>
           </section>
-          <section class="content-card span-8">
+          <section class="content-card span-8 lesson-pane ${activeLessonTab === "learn" ? "active" : ""}" data-pane="learn">
             <h3>📘 Konu Anlatımı</h3>
             ${lesson.explain.map(p => `<p>${escapeHtml(p)}</p>`).join("")}
           </section>
-          <section class="content-card span-12">
+          <section class="content-card span-12 lesson-pane ${activeLessonTab === "learn" ? "active" : ""}" data-pane="learn">
             <h3>🧩 Kalıp Kutusu</h3>
             <div class="formula-list">${lesson.formulas.map(f => `<button class="formula" data-speak="${escapeAttr(getEnglishSpeechText(f))}">${escapeHtml(f)}</button>`).join("")}</div>
           </section>
-          <section class="content-card span-12" id="vocab-section">
+          <section class="content-card span-12 lesson-pane ${activeLessonTab === "words" ? "active" : ""}" data-pane="words" id="vocab-section">
             <h3>🔤 Kelime Kartları</h3>
             <p class="small">Hoparlöre basınca metin özellikle İngilizce sesle okunur.</p>
             <div class="vocab-grid">${vocabHtml}</div>
           </section>
-          <section class="content-card span-6">
+          <section class="content-card span-6 lesson-pane ${activeLessonTab === "practice" ? "active" : ""}" data-pane="practice">
             <h3>💬 Mini Diyalog</h3>
             <div class="dialogue">${dialogueHtml}</div>
           </section>
-          <section class="content-card span-6">
+          <section class="content-card span-6 lesson-pane ${activeLessonTab === "practice" ? "active" : ""}" data-pane="practice">
             <h3>📖 Kısa Okuma</h3>
             <div class="reading-box">
               <button class="pill-btn" data-speak="${escapeAttr(lesson.reading.text)}" style="margin-bottom:14px">🔊 Read in English</button>
@@ -7958,12 +7971,12 @@ const COURSE = [
               <div class="answer">${escapeHtml(lesson.reading.answer)}</div>
             </div>
           </section>
-          <section class="content-card span-5">
+          <section class="content-card span-5 lesson-pane ${activeLessonTab === "practice" ? "active" : ""}" data-pane="practice">
             <h3>✍️ Bölüm İçi Pratik</h3>
             <p class="small">Bunlar ısınma alıştırmaları. Ana kilidi bölüm sonu testi açar.</p>
             <div class="drill-grid">${drillsHtml}</div>
           </section>
-          <section class="content-card span-7" id="test-area">
+          <section class="content-card span-7 lesson-pane ${activeLessonTab === "test" ? "active" : ""}" data-pane="test" id="test-area">
             <div class="quiz-head"><div><h3>🏁 Bölüm Sonu Testi</h3><p>Sonraki seviyeye geçmek için <strong>${lesson.final.length}/${lesson.final.length}</strong> yapmalısın.</p></div></div>
             <form id="quizForm">${questionsHtml}</form>
             <div id="result" class="result"></div>
@@ -7989,13 +8002,28 @@ const COURSE = [
         return;
       }
       currentId = id;
+      activeLessonTab = "learn";
       saveState();
       renderAll();
     }
     function startLesson(){
       const lesson = getCurrentLesson();
       if (isLocked(lesson)) return showToast("Bu seviye kilitli.", "bad");
+      activeLessonTab = "learn";
+      renderWorkspace();
       document.getElementById("workspace").scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+    function switchLessonTab(tab){
+      if (!["learn", "words", "practice", "test"].includes(tab)) return;
+      activeLessonTab = tab;
+      document.querySelectorAll("[data-lesson-tab]").forEach(button => {
+        const selected = button.dataset.lessonTab === tab;
+        button.classList.toggle("active", selected);
+        button.setAttribute("aria-selected", selected ? "true" : "false");
+      });
+      document.querySelectorAll("[data-pane]").forEach(pane => {
+        pane.classList.toggle("active", pane.dataset.pane === tab);
+      });
     }
     function toggleAnswer(button){
       const answer = button.parentElement.querySelector(".answer") || button.nextElementSibling;
@@ -8049,6 +8077,7 @@ const COURSE = [
     function goNext(){
       if (currentId < COURSE.length && state.unlocked > currentId) {
         currentId++;
+        activeLessonTab = "learn";
         saveState();
         renderAll();
         document.getElementById("levels").scrollIntoView({ behavior:"smooth", block:"start" });
