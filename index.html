@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Learn English — Premium Workbook</title>
-  <meta name="description" content="Sıfırdan A2 seviyesine, kısa dersler ve pratiklerle kolay İngilizce öğren." />
+  <title>Easy English — A0'dan A2'ye 45 Adım</title>
+  <meta name="description" content="45 yapılandırılmış ders, aktif pratikler, kelime tekrarı, dinleme ve açıklamalı testlerle İngilizce öğren." />
   <meta name="theme-color" content="#172033" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="English, made easy." />
-  <meta property="og:description" content="A0'dan A2'ye 30 adımda İngilizce öğren." />
+  <meta property="og:description" content="A0'dan A2'ye 45 yapılandırılmış dersle İngilizce öğren." />
   <meta property="og:url" content="https://divinazekeriyakoy.com/" />
-  <meta property="og:image" content="https://divinazekeriyakoy.com/assets/og-card.png" />
-  <meta property="og:image:width" content="1536" />
-  <meta property="og:image:height" content="1024" />
+  <meta property="og:image" content="https://divinazekeriyakoy.com/assets/og-card-45.png" />
+  <meta property="og:image:width" content="1693" />
+  <meta property="og:image:height" content="929" />
   <style>
     :root{
       --bg:#050913;
@@ -556,6 +556,7 @@
   <link rel="stylesheet" href="redesign.css" />
 </head>
 <body>
+  <a class="skip-link" href="#workspace">Ders çalışma alanına geç</a>
   <div class="app-frame">
     <aside class="sidebar" aria-label="Ana menü">
       <div class="brand-icon" title="Easy English">E.</div>
@@ -565,13 +566,13 @@
       <button class="nav-item" data-scroll="progress"><span class="nav-ico">◔</span><span class="nav-label">İlerleme</span></button>
       <button class="nav-item" data-scroll="vocab"><span class="nav-ico">Aa</span><span class="nav-label">Kelimeler</span></button>
       <button class="nav-item" id="resetProgress"><span class="nav-ico">↺</span><span class="nav-label">Sıfırla</span></button>
-      <div class="streak"><strong>Her gün 20 dk</strong><span>Küçük adımlar, kalıcı gelişim.</span></div>
+      <div class="streak"><strong><b id="studyStreak">0</b> günlük seri</strong><span>Bu hafta <b id="weeklyDays">0</b>/5 gün çalıştın.</span></div>
     </aside>
 
     <main class="main" id="top">
       <section class="top-grid">
         <div>
-          <div class="eyebrow">A0'DAN A2'YE · 30 ADIM</div>
+          <div class="eyebrow">A0'DAN A2'YE · 45 ADIM</div>
           <h1 class="title">English,<br>made easy<span class="spark">.</span></h1>
           <p class="subtitle">Kısa anlatımlar, gerçek hayattan örnekler ve bol pratik. Nerede kaldığını düşünmeden, sıradaki küçük adımı tamamla.</p>
           <div class="hero-actions">
@@ -590,14 +591,15 @@
           </div>
           <div class="progress-title">Genel İlerleme</div>
           <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-          <div class="progress-meta"><span><b id="doneCount">0</b> / 30 seviye tamamlandı</span><strong id="percentCount">0%</strong></div>
+          <div class="progress-meta"><span><b id="doneCount">0</b> / <span id="totalCount">45</span> seviye tamamlandı</span><strong id="percentCount">0%</strong></div>
+          <button class="progress-reset" id="resetProgressMobile" type="button">İlerlemeyi sıfırla</button>
         </section>
       </section>
 
       <section class="layout" id="levels">
         <div>
           <div class="toolbar">
-            <div class="search-wrap"><span>⌕</span><input class="search" id="search" placeholder="Ders, konu veya kelime ara..." /></div>
+            <div class="search-wrap"><span aria-hidden="true">⌕</span><input class="search" id="search" aria-label="Ders, konu veya kelime ara" placeholder="Ders, konu veya kelime ara..." /></div>
             <div class="mini-actions">
               <button class="ghost-btn" id="printPage">Yazdır / PDF</button>
               <button class="ghost-btn" id="clearSearch">Temizle</button>
@@ -613,6 +615,7 @@
   </div>
   <div class="toast" id="toast"></div>
 
+  <script src="course-upgrade.js"></script>
   <script>
 const COURSE = [
   {
@@ -7643,14 +7646,17 @@ const COURSE = [
     ]
   }
 ];
+    applyCourseUpgrade(COURSE);
 
     const STORAGE_KEY = "english_workbook_progress_v1";
     const NAME_KEY = "english_workbook_student_name_v1";
     const sectionDefs = [
-      { key:"A1", title:"A1 — MUTLAK BAŞLANGIÇ", range:[1,8] },
-      { key:"A1", title:"A1 — TEMEL SEVİYE", range:[9,16] },
-      { key:"A2", title:"A2 — GÜNLÜK HAYAT", range:[17,24] },
-      { key:"A2", title:"A2 — GEÇİŞ & TEKRAR", range:[25,30] }
+      { key:"A0", title:"BAŞLANGIÇ — İLK ADIMLAR", range:[1,8] },
+      { key:"A1", title:"A1 — TEMEL İLETİŞİM", range:[9,16] },
+      { key:"A1+", title:"A1+ — GEÇMİŞ, GELECEK & GÜNLÜK HAYAT", range:[17,25] },
+      { key:"A2", title:"A2 — BECERİ & GENEL TEKRAR", range:[26,30] },
+      { key:"A2", title:"A2 — DİLİ GENİŞLET", range:[31,38] },
+      { key:"A2", title:"A2 — GERÇEK HAYAT GÖREVLERİ", range:[39,45] }
     ];
 
     let state = loadState();
@@ -7662,10 +7668,13 @@ const COURSE = [
       lessonPanel: document.getElementById("lessonPanel"),
       workspace: document.getElementById("workspace"),
       doneCount: document.getElementById("doneCount"),
+      totalCount: document.getElementById("totalCount"),
       percentCount: document.getElementById("percentCount"),
       progressFill: document.getElementById("progressFill"),
       search: document.getElementById("search"),
       studentName: document.getElementById("studentName"),
+      studyStreak: document.getElementById("studyStreak"),
+      weeklyDays: document.getElementById("weeklyDays"),
       toast: document.getElementById("toast")
     };
 
@@ -7675,6 +7684,26 @@ const COURSE = [
       renderWorkspace();
     });
     el.search.addEventListener("input", renderLevelSections);
+    document.addEventListener("input", event => {
+      const capstone = event.target.closest("[data-capstone]");
+      if (!capstone) return;
+      state.capstoneDraft = capstone.value;
+      saveState();
+    });
+    document.addEventListener("keydown", event => {
+      const tab = event.target.closest("[data-lesson-tab]");
+      if (!tab || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      const tabs = [...document.querySelectorAll("[data-lesson-tab]")];
+      const current = tabs.indexOf(tab);
+      let next = current;
+      if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
+      if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+      if (event.key === "Home") next = 0;
+      if (event.key === "End") next = tabs.length - 1;
+      event.preventDefault();
+      tabs[next].focus();
+      switchLessonTab(tabs[next].dataset.lessonTab);
+    });
 
     document.addEventListener("click", (event) => {
       const card = event.target.closest("[data-level]");
@@ -7703,6 +7732,15 @@ const COURSE = [
 
       const tab = event.target.closest("[data-lesson-tab]");
       if (tab) return switchLessonTab(tab.dataset.lessonTab);
+
+      const practice = event.target.closest("[data-check-practice]");
+      if (practice) return checkPractice();
+
+      const word = event.target.closest("[data-word-status]");
+      if (word) return setWordStatus(word.dataset.wordKey, word.dataset.wordStatus);
+
+      const revealReading = event.target.closest("[data-reveal-reading]");
+      if (revealReading) return revealListeningText();
     });
 
     document.getElementById("readEnglish").addEventListener("click", () => {
@@ -7710,15 +7748,18 @@ const COURSE = [
     });
     document.getElementById("printPage").addEventListener("click", () => window.print());
     document.getElementById("clearSearch").addEventListener("click", () => { el.search.value = ""; renderLevelSections(); });
-    document.getElementById("resetProgress").addEventListener("click", () => {
+    function resetProgress(){
       if (confirm("Tüm ilerleme sıfırlansın mı?")) {
         localStorage.removeItem(STORAGE_KEY);
         state = loadState();
         currentId = 1;
+        activeLessonTab = "learn";
         renderAll();
         showToast("İlerleme sıfırlandı.", "bad");
       }
-    });
+    }
+    document.getElementById("resetProgress").addEventListener("click", resetProgress);
+    document.getElementById("resetProgressMobile").addEventListener("click", resetProgress);
 
     if ("speechSynthesis" in window) {
       voices = window.speechSynthesis.getVoices();
@@ -7726,12 +7767,56 @@ const COURSE = [
     }
 
     function loadState(){
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { unlocked:1, passed:{}, scores:{}, currentId:1 }; }
-      catch(e){ return { unlocked:1, passed:{}, scores:{}, currentId:1 }; }
+      const empty = { unlocked:1, passed:{}, scores:{}, currentId:1, wordStatus:{}, studyDates:[], capstoneDraft:"" };
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        const normalized = {
+          ...empty,
+          ...saved,
+          passed: saved.passed || {},
+          scores: saved.scores || {},
+          wordStatus: saved.wordStatus || {},
+          studyDates: Array.isArray(saved.studyDates) ? saved.studyDates : []
+        };
+        const completedIds = Object.keys(normalized.passed).filter(id => normalized.passed[id]).map(Number);
+        const nextAfterCompleted = completedIds.length ? Math.max(...completedIds) + 1 : 1;
+        normalized.unlocked = Math.min(COURSE.length, Math.max(normalized.unlocked || 1, nextAfterCompleted));
+        return normalized;
+      }
+      catch(e){ return empty; }
     }
     function saveState(){
       state.currentId = currentId;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+    function localDateKey(date = new Date()){
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+    function recordStudy(){
+      const today = localDateKey();
+      state.studyDates = [...new Set([...(state.studyDates || []), today])].slice(-120);
+      saveState();
+      renderStudyStats();
+    }
+    function renderStudyStats(){
+      const dates = new Set(state.studyDates || []);
+      let streak = 0;
+      const cursor = new Date();
+      if (!dates.has(localDateKey(cursor))) cursor.setDate(cursor.getDate() - 1);
+      while (dates.has(localDateKey(cursor))) {
+        streak++;
+        cursor.setDate(cursor.getDate() - 1);
+      }
+      const weekStart = new Date();
+      const day = (weekStart.getDay() + 6) % 7;
+      weekStart.setDate(weekStart.getDate() - day);
+      weekStart.setHours(0,0,0,0);
+      const weekly = [...dates].filter(value => new Date(value + "T00:00:00") >= weekStart).length;
+      el.studyStreak.textContent = streak;
+      el.weeklyDays.textContent = Math.min(weekly, 7);
     }
     function getCurrentLesson(){ return COURSE.find(x => x.id === currentId) || COURSE[0]; }
     function escapeHtml(value){
@@ -7810,12 +7895,14 @@ const COURSE = [
       utter.rate = 0.82;
       utter.pitch = 1;
       window.speechSynthesis.speak(utter);
+      recordStudy();
     }
 
     function renderStats(){
-      const done = Object.keys(state.passed || {}).length;
+      const done = COURSE.filter(lesson => state.passed?.[lesson.id]).length;
       const percent = Math.round((done / COURSE.length) * 100);
       el.doneCount.textContent = done;
+      el.totalCount.textContent = COURSE.length;
       el.percentCount.textContent = percent + "%";
       el.progressFill.style.width = percent + "%";
     }
@@ -7876,7 +7963,7 @@ const COURSE = [
           <div class="step"><div class="step-ico">▤</div><div><h4>Konu Anlatımı</h4><p>Kısa, net ve seviye odaklı anlatım</p></div><div class="step-time">10 dk</div></div>
           <div class="step"><div class="step-ico">◉</div><div><h4>Pratik Yap</h4><p>Kelime, cümle ve konuşma pratiği</p></div><div class="step-time">15 dk</div></div>
           <div class="step"><div class="step-ico">✎</div><div><h4>Konu Testi</h4><p>Öğrendiklerini pekiştir</p></div><div class="step-time">10 dk</div></div>
-          <div class="step"><div class="step-ico">🏆</div><div><h4>Final Testi</h4><p>10/10 ile sonraki seviyeyi aç</p></div><div class="step-time">15 dk</div></div>
+          <div class="step"><div class="step-ico">🏆</div><div><h4>Final Testi</h4><p>%80 başarıyla sonraki seviyeyi aç</p></div><div class="step-time">15 dk</div></div>
         </div>
         <button class="start-btn" data-start ${locked ? "disabled" : ""}>${locked ? "Kilitli Seviye" : "Derse Başla"} →</button>
       `;
@@ -7885,28 +7972,36 @@ const COURSE = [
     function renderWorkspace(){
       const lesson = getCurrentLesson();
       if (isLocked(lesson)) {
-        el.workspace.innerHTML = `<div class="workspace-head"><div><span class="level-badge">Kilitli</span><h2>${escapeHtml(displayTitle(lesson))}</h2><p>Bu seviyeyi açmak için önceki bölüm testinden tam puan almalısın.</p></div></div>`;
+        el.workspace.innerHTML = `<div class="workspace-head"><div><span class="level-badge">Kilitli</span><h2>${escapeHtml(displayTitle(lesson))}</h2><p>Bu seviyeyi açmak için önceki bölüm testinde en az %80 başarı sağlamalısın.</p></div></div>`;
         return;
       }
       const student = localStorage.getItem(NAME_KEY) || "öğrenci";
-      const vocabHtml = lesson.vocab.map(v => `
-        <div class="vocab" id="vocab">
+      const vocabHtml = lesson.vocab.map((v, vi) => {
+        const wordKey = `${lesson.id}:${vi}`;
+        const wordState = state.wordStatus?.[wordKey] || "";
+        return `
+        <article class="vocab ${wordState ? `word-${wordState}` : ""}">
           <div class="vocab-head">
             <div><strong>${escapeHtml(v.en)}</strong><div class="tr">${escapeHtml(v.tr)}</div></div>
-            <button class="speak-btn" data-speak="${escapeAttr(v.en + ". " + v.ex)}" title="English voice">🔊</button>
+            <button class="speak-btn" data-speak="${escapeAttr(v.en + ". " + v.ex)}" aria-label="${escapeAttr(v.en)} kelimesini dinle">🔊</button>
           </div>
           <div class="ex">${escapeHtml(v.ex)}</div>
-        </div>`).join("");
+          <div class="word-actions">
+            <button data-word-key="${wordKey}" data-word-status="review" class="${wordState === "review" ? "active" : ""}">Tekrar et</button>
+            <button data-word-key="${wordKey}" data-word-status="known" class="${wordState === "known" ? "active" : ""}">Biliyorum</button>
+          </div>
+        </article>`}).join("");
       const dialogueHtml = lesson.dialogue.map(d => `
         <div class="bubble">
           <div class="speaker">${escapeHtml(d.speaker).slice(0,2)}</div>
           <p><b>${escapeHtml(d.speaker)}:</b> ${escapeHtml(d.line)} <button class="speak-btn" data-speak="${escapeAttr(d.line)}" title="English voice">🔊</button></p>
         </div>`).join("");
       const drillsHtml = lesson.drills.map((d, i) => `
-        <div class="drill">
+        <div class="drill" data-drill="${i}" data-model-answer="${escapeAttr(d.answer)}">
           <b>${i+1}. ${escapeHtml(d.task)}</b>
-          <button class="show-answer" data-answer>Cevabı göster</button>
-          <div class="answer">${escapeHtml(d.answer)}</div>
+          <label class="sr-only" for="practice_${lesson.id}_${i}">${escapeHtml(d.task)}</label>
+          <input class="practice-input" id="practice_${lesson.id}_${i}" data-practice-input autocomplete="off" placeholder="Cevabını yaz..." />
+          <div class="practice-feedback" aria-live="polite"></div>
         </div>`).join("");
       const questionsHtml = lesson.final.map((item, qi) => `
         <div class="question" data-question="${qi}">
@@ -7918,6 +8013,7 @@ const COURSE = [
                 <span>${escapeHtml(opt)}</span>
               </label>`).join("")}
           </div>
+          <div class="question-feedback" aria-live="polite"></div>
         </div>`).join("");
       el.workspace.innerHTML = `
         <div class="workspace-head">
@@ -7934,11 +8030,11 @@ const COURSE = [
           </div>
           <button class="pill-btn" data-speak="${escapeAttr(lesson.reading.text)}"><span>🔊</span><span>Read in English</span></button>
         </div>
-        <nav class="lesson-tabs" aria-label="Ders bölümleri">
-          <button class="lesson-tab ${activeLessonTab === "learn" ? "active" : ""}" data-lesson-tab="learn">1 · Öğren</button>
-          <button class="lesson-tab ${activeLessonTab === "words" ? "active" : ""}" data-lesson-tab="words">2 · Kelimeler</button>
-          <button class="lesson-tab ${activeLessonTab === "practice" ? "active" : ""}" data-lesson-tab="practice">3 · Pratik</button>
-          <button class="lesson-tab ${activeLessonTab === "test" ? "active" : ""}" data-lesson-tab="test">4 · Test</button>
+        <nav class="lesson-tabs" aria-label="Ders bölümleri" role="tablist">
+          <button role="tab" tabindex="${activeLessonTab === "learn" ? "0" : "-1"}" aria-selected="${activeLessonTab === "learn"}" class="lesson-tab ${activeLessonTab === "learn" ? "active" : ""}" data-lesson-tab="learn">1 · Öğren</button>
+          <button role="tab" tabindex="${activeLessonTab === "words" ? "0" : "-1"}" aria-selected="${activeLessonTab === "words"}" class="lesson-tab ${activeLessonTab === "words" ? "active" : ""}" data-lesson-tab="words">2 · Kelimeler</button>
+          <button role="tab" tabindex="${activeLessonTab === "practice" ? "0" : "-1"}" aria-selected="${activeLessonTab === "practice"}" class="lesson-tab ${activeLessonTab === "practice" ? "active" : ""}" data-lesson-tab="practice">3 · Pratik</button>
+          <button role="tab" tabindex="${activeLessonTab === "test" ? "0" : "-1"}" aria-selected="${activeLessonTab === "test"}" class="lesson-tab ${activeLessonTab === "test" ? "active" : ""}" data-lesson-tab="test">4 · Test</button>
         </nav>
         <div class="content-grid">
           <section class="content-card span-4 lesson-pane ${activeLessonTab === "learn" ? "active" : ""}" data-pane="learn">
@@ -7955,7 +8051,7 @@ const COURSE = [
           </section>
           <section class="content-card span-12 lesson-pane ${activeLessonTab === "words" ? "active" : ""}" data-pane="words" id="vocab-section">
             <h3>🔤 Kelime Kartları</h3>
-            <p class="small">Hoparlöre basınca metin özellikle İngilizce sesle okunur.</p>
+            <p class="small">Her kelimeyi dinle. Zorlandıklarını “Tekrar et” listesine ekle; bildiklerini işaretle.</p>
             <div class="vocab-grid">${vocabHtml}</div>
           </section>
           <section class="content-card span-6 lesson-pane ${activeLessonTab === "practice" ? "active" : ""}" data-pane="practice">
@@ -7963,22 +8059,34 @@ const COURSE = [
             <div class="dialogue">${dialogueHtml}</div>
           </section>
           <section class="content-card span-6 lesson-pane ${activeLessonTab === "practice" ? "active" : ""}" data-pane="practice">
-            <h3>📖 Kısa Okuma</h3>
+            <h3>🎧 Dinle ve Anla</h3>
             <div class="reading-box">
-              <button class="pill-btn" data-speak="${escapeAttr(lesson.reading.text)}" style="margin-bottom:14px">🔊 Read in English</button>
-              <p>${escapeHtml(lesson.reading.text)}</p>
+              <p class="small">Önce metne bakmadan dinle ve soruyu cevaplamaya çalış.</p>
+              <button class="pill-btn" data-speak="${escapeAttr(lesson.reading.text)}" style="margin-bottom:14px">▶ Metni dinle</button>
               <p><b>Soru:</b> ${escapeHtml(lesson.reading.question)}</p>
-              <button class="show-answer" data-answer>Cevabı göster</button>
-              <div class="answer">${escapeHtml(lesson.reading.answer)}</div>
+              <button class="show-answer" data-reveal-reading>Metni ve cevabı göster</button>
+              <div class="listening-reveal" hidden>
+                <p lang="en">${escapeHtml(lesson.reading.text)}</p>
+                <div class="answer show">${escapeHtml(lesson.reading.answer)}</div>
+              </div>
             </div>
           </section>
           <section class="content-card span-5 lesson-pane ${activeLessonTab === "practice" ? "active" : ""}" data-pane="practice">
             <h3>✍️ Bölüm İçi Pratik</h3>
-            <p class="small">Bunlar ısınma alıştırmaları. Ana kilidi bölüm sonu testi açar.</p>
+            <p class="small">Cevapları kendin yaz. Kontrolden sonra örnek cevaplarla karşılaştır.</p>
             <div class="drill-grid">${drillsHtml}</div>
+            ${lesson.id === COURSE.length ? `
+              <div class="capstone">
+                <h4>Final görevi</h4>
+                <p>Bir arkadaşına 5–8 cümlelik İngilizce mesaj yaz: kendini tanıt, geçen hafta yaptığın bir şeyi, gelecek planını ve buluşma önerini anlat.</p>
+                <label for="capstoneDraft">Final metnin</label>
+                <textarea id="capstoneDraft" data-capstone rows="8" placeholder="Hi ...">${escapeHtml(state.capstoneDraft || "")}</textarea>
+                <small>Taslağın bu cihazda otomatik kaydedilir.</small>
+              </div>` : ""}
+            <button type="button" class="action-btn primary practice-check" data-check-practice>Pratiği kontrol et</button>
           </section>
           <section class="content-card span-7 lesson-pane ${activeLessonTab === "test" ? "active" : ""}" data-pane="test" id="test-area">
-            <div class="quiz-head"><div><h3>🏁 Bölüm Sonu Testi</h3><p>Sonraki seviyeye geçmek için <strong>${lesson.final.length}/${lesson.final.length}</strong> yapmalısın.</p></div></div>
+            <div class="quiz-head"><div><h3>🏁 Bölüm Sonu Testi</h3><p>Sonraki seviyeye geçmek için en az <strong>${Math.ceil(lesson.final.length * .8)}/${lesson.final.length}</strong> yapmalısın.</p></div></div>
             <form id="quizForm">${questionsHtml}</form>
             <div id="result" class="result"></div>
             <div class="sticky-actions">
@@ -7999,7 +8107,7 @@ const COURSE = [
         renderLevelSections();
         renderPanel();
         renderWorkspace();
-        showToast("Bu seviye kilitli. Önce önceki bölüm testinden tam puan almalısın.", "bad");
+        showToast("Bu seviye kilitli. Önce önceki bölüm testinde en az %80 başarı sağlamalısın.", "bad");
         return;
       }
       currentId = id;
@@ -8021,10 +8129,69 @@ const COURSE = [
         const selected = button.dataset.lessonTab === tab;
         button.classList.toggle("active", selected);
         button.setAttribute("aria-selected", selected ? "true" : "false");
+        button.tabIndex = selected ? 0 : -1;
       });
       document.querySelectorAll("[data-pane]").forEach(pane => {
         pane.classList.toggle("active", pane.dataset.pane === tab);
       });
+      if (tab === "words") document.getElementById("vocab-section")?.scrollIntoView({ behavior:"smooth", block:"start" });
+      if (tab === "test") document.getElementById("test-area")?.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+    function normalizeAnswer(value){
+      return String(value || "")
+        .toLocaleLowerCase("tr-TR")
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[’']/g, "")
+        .replace(/[^a-z0-9çğıöşü\s/]/gi, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+    function checkPractice(){
+      const drills = [...document.querySelectorAll("[data-drill]")];
+      let completed = 0;
+      drills.forEach(drill => {
+        const input = drill.querySelector("[data-practice-input]");
+        const feedback = drill.querySelector(".practice-feedback");
+        const model = drill.dataset.modelAnswer || "";
+        const given = normalizeAnswer(input?.value);
+        const expected = normalizeAnswer(model);
+        const exactEnough = given && (
+          given === expected ||
+          expected.split("/").some(option => normalizeAnswer(option) === given) ||
+          (given.length > 5 && expected.includes(given))
+        );
+        input?.classList.toggle("is-correct", !!exactEnough);
+        input?.classList.toggle("needs-review", !!given && !exactEnough);
+        if (!given) {
+          feedback.className = "practice-feedback needs-answer";
+          feedback.textContent = "Önce kendi cevabını yaz.";
+        } else {
+          completed++;
+          feedback.className = `practice-feedback ${exactEnough ? "correct" : "model"}`;
+          feedback.innerHTML = exactEnough
+            ? "✓ Güzel. Örnek cevapla eşleşiyor."
+            : `Karşılaştır: <b>${escapeHtml(model)}</b>`;
+        }
+      });
+      if (completed) recordStudy();
+      showToast(`${completed}/${drills.length} alıştırmayı cevapladın.`, completed === drills.length ? "ok" : "bad");
+    }
+    function setWordStatus(wordKey, status){
+      if (!wordKey || !["review", "known"].includes(status)) return;
+      state.wordStatus ||= {};
+      state.wordStatus[wordKey] = status;
+      saveState();
+      recordStudy();
+      renderWorkspace();
+      activeLessonTab = "words";
+      switchLessonTab("words");
+      showToast(status === "known" ? "Kelime öğrenildi olarak işaretlendi." : "Kelime tekrar listene eklendi.", "ok");
+    }
+    function revealListeningText(){
+      const reveal = document.querySelector(".listening-reveal");
+      if (!reveal) return;
+      reveal.hidden = false;
+      recordStudy();
     }
     function toggleAnswer(button){
       const answer = button.parentElement.querySelector(".answer") || button.nextElementSibling;
@@ -8034,35 +8201,53 @@ const COURSE = [
       const lesson = COURSE.find(x => x.id === lessonId);
       if (!lesson) return;
       let score = 0;
+      let unanswered = 0;
       lesson.final.forEach((item, qi) => {
         const question = document.querySelector(`.question[data-question="${qi}"]`);
         if (!question) return;
         const selected = question.querySelector(`input[name="q_${lesson.id}_${qi}"]:checked`);
         const chosen = selected ? Number(selected.value) : -1;
+        if (chosen < 0) unanswered++;
         question.querySelectorAll(".option").forEach(opt => {
           opt.classList.remove("correct", "wrong");
           const idx = Number(opt.dataset.option);
           if (idx === item.answer) opt.classList.add("correct");
           if (idx === chosen && chosen !== item.answer) opt.classList.add("wrong");
         });
+        const feedback = question.querySelector(".question-feedback");
+        if (feedback) {
+          if (chosen < 0) {
+            feedback.className = "question-feedback show unanswered";
+            feedback.textContent = "Bu soruyu boş bıraktın.";
+          } else if (chosen === item.answer) {
+            feedback.className = "question-feedback show correct";
+            feedback.textContent = `✓ Doğru. ${item.help || ""}`.trim();
+          } else {
+            feedback.className = "question-feedback show wrong";
+            feedback.textContent = `Tekrar bak: ${item.help || `Doğru cevap: ${item.options[item.answer]}`}`;
+          }
+        }
         if (chosen === item.answer) score++;
       });
       const result = document.getElementById("result");
       const max = lesson.final.length;
-      result.className = "result show " + (score === max ? "ok" : "bad");
-      if (score === max) {
+      const passScore = Math.ceil(max * .8);
+      const passed = score >= passScore;
+      result.className = "result show " + (passed ? "ok" : "bad");
+      if (passed) {
         state.passed[lesson.id] = true;
         state.scores[lesson.id] = score;
         state.unlocked = Math.max(state.unlocked || 1, Math.min(COURSE.length, lesson.id + 1));
         saveState();
-        result.innerHTML = `Mükemmel: ${score}/${max}. Sonraki seviye açıldı.`;
+        result.innerHTML = `<strong>${score}/${max} — Başarılı.</strong> Sonraki seviye açıldı.${score < max ? " Yanlış soruların açıklamalarını inceleyip istediğinde tekrar çözebilirsin." : " Tüm cevapların doğru!"}`;
         showToast("Tebrikler! Sonraki seviye açıldı.", "ok");
       } else {
         state.scores[lesson.id] = score;
         saveState();
-        result.innerHTML = `Skor: ${score}/${max}. Sonraki seviye için tam puan gerekli. Yanlışları inceleyip tekrar dene.`;
-        showToast(`Skor: ${score}/${max}. Tam puan gerekiyor.`, "bad");
+        result.innerHTML = `<strong>${score}/${max}</strong> — Geçmek için ${passScore} doğru gerekiyor.${unanswered ? ` ${unanswered} soruyu boş bıraktın.` : ""} Açıklamaları inceleyip tekrar dene.`;
+        showToast(`Skor: ${score}/${max}. ${passScore} doğru gerekiyor.`, "bad");
       }
+      recordStudy();
       renderStats();
       renderLevelSections();
       renderPanel();
@@ -8072,6 +8257,10 @@ const COURSE = [
     function clearQuiz(){
       document.querySelectorAll("#quizForm input").forEach(i => i.checked = false);
       document.querySelectorAll("#quizForm .option").forEach(o => o.classList.remove("correct", "wrong"));
+      document.querySelectorAll("#quizForm .question-feedback").forEach(feedback => {
+        feedback.className = "question-feedback";
+        feedback.textContent = "";
+      });
       const result = document.getElementById("result");
       if (result) { result.className = "result"; result.innerHTML = ""; }
     }
@@ -8085,11 +8274,15 @@ const COURSE = [
       } else if (currentId >= COURSE.length) {
         showToast("Tüm seviyeler tamamlandı.", "ok");
       } else {
-        showToast("Önce bu bölüm testinden tam puan almalısın.", "bad");
+        showToast("Önce bu bölüm testinde en az %80 başarı sağlamalısın.", "bad");
       }
     }
     function scrollToArea(area){
       const map = { top:"top", levels:"levels", workspace:"workspace", progress:"progress", vocab:"vocab-section" };
+      if (area === "vocab") {
+        activeLessonTab = "words";
+        switchLessonTab("words");
+      }
       const target = document.getElementById(map[area] || area);
       document.querySelectorAll("[data-scroll]").forEach(button => {
         button.classList.toggle("active", button.dataset.scroll === area);
@@ -8103,7 +8296,7 @@ const COURSE = [
       el.toast.className = "toast show " + type;
       toastTimer = setTimeout(() => el.toast.className = "toast", 3200);
     }
-    function renderAll(){ renderStats(); renderLevelSections(); renderPanel(); renderWorkspace(); }
+    function renderAll(){ renderStats(); renderStudyStats(); renderLevelSections(); renderPanel(); renderWorkspace(); }
     renderAll();
   </script>
 </body>

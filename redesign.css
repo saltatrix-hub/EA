@@ -31,6 +31,29 @@ button:focus-visible, input:focus-visible {
   outline: 3px solid rgba(52, 87, 213, .28);
   outline-offset: 2px;
 }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+  padding: 10px 14px;
+  color: white;
+  border-radius: 10px;
+  background: var(--brand);
+  transform: translateY(-150%);
+}
+.skip-link:focus { transform: translateY(0); }
 
 .app-frame {
   display: grid;
@@ -182,6 +205,17 @@ button:focus-visible, input:focus-visible {
 .progress-fill { background: linear-gradient(90deg, var(--accent), #ffe9a3); box-shadow: none; }
 .progress-meta { color: #bdc6d8; }
 .progress-meta strong, .progress-meta b { color: white; }
+.progress-reset {
+  margin-top: 18px;
+  padding: 0;
+  color: #bdc6d8;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.25);
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+}
+.progress-reset:hover { color: white; }
 
 .layout { grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; }
 .toolbar {
@@ -315,13 +349,94 @@ button:focus-visible, input:focus-visible {
 .objective-list li::marker { color: var(--brand); }
 .formula:hover { color: var(--brand); border-color: rgba(52,87,213,.35); background: var(--surface-soft); }
 .speak-btn { color: var(--brand); border-color: rgba(52,87,213,.18); background: var(--surface-soft); }
+.word-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+.word-actions button {
+  min-height: 36px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+}
+.word-actions button:hover { color: var(--brand); border-color: rgba(52,87,213,.32); }
+.word-actions button.active { color: white; border-color: var(--brand); background: var(--brand); }
+.vocab.word-known { border-color: #9fd9be; background: #f1fbf6; }
+.vocab.word-review { border-color: #eed181; background: #fffaf0; }
 .speaker { color: #fff; background: var(--brand); }
 .show-answer { color: var(--brand); }
 .answer.show { color: var(--ink); border-color: #eed181; background: #fff9e5; }
+.practice-input {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: white;
+}
+.practice-input.is-correct { border-color: #69bd94; background: #f1fbf6; }
+.practice-input.needs-review { border-color: #e1b94d; background: #fffaf0; }
+.practice-feedback {
+  min-height: 20px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.practice-feedback.correct { color: #176c44; }
+.practice-feedback.model { color: #805b00; }
+.practice-feedback.needs-answer { color: var(--danger); }
+.practice-check { margin-top: 16px; }
+.capstone {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(52,87,213,.2);
+  border-radius: 16px;
+  background: var(--surface-soft);
+}
+.capstone h4 { margin: 0 0 8px; }
+.capstone p { color: var(--muted); line-height: 1.55; }
+.capstone label { display: block; margin-bottom: 8px; font-weight: 750; }
+.capstone textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 13px;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: white;
+  font: inherit;
+  line-height: 1.55;
+}
+.capstone small { display: block; margin-top: 8px; color: var(--muted); }
+.listening-reveal[hidden] { display: none; }
+.listening-reveal {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
 .option { color: var(--ink); border-color: var(--line); background: white; }
 .option:hover { border-color: rgba(52,87,213,.35); background: var(--surface-soft); }
 .option.correct { border-color: #69bd94; background: #eaf9f1; }
 .option.wrong { border-color: #e08d8d; background: #fff0f0; }
+.question-feedback {
+  display: none;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.question-feedback.show { display: block; }
+.question-feedback.correct { color: #176c44; background: #ecfaf3; }
+.question-feedback.wrong { color: #9b3030; background: #fff1f1; }
+.question-feedback.unanswered { color: #805b00; background: #fff9e5; }
 .result.ok { color: #176c44; border-color: #9fd9be; background: #ecfaf3; }
 .result.bad { color: #9b3030; border-color: #edb1b1; background: #fff1f1; }
 .sticky-actions {
