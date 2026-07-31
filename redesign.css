@@ -1,16 +1,16 @@
 :root {
-  --paper: #f6f5ef;
-  --surface: #ffffff;
-  --surface-soft: #eef5ff;
-  --ink: #172033;
-  --muted: #667085;
-  --line: #e2e7ef;
-  --brand: #3457d5;
-  --brand-dark: #203a9a;
-  --accent: #ffcf57;
-  --mint: #bcebd6;
+  --paper: #fff8fa;
+  --surface: #fffefe;
+  --surface-soft: #fff0f4;
+  --ink: #382a34;
+  --muted: #766571;
+  --line: #eadde3;
+  --brand: #b94066;
+  --brand-dark: #9f3658;
+  --accent: #f2b8c8;
+  --mint: #f6dce5;
   --danger: #c84040;
-  --shadow: 0 18px 60px rgba(28, 39, 67, .10);
+  --shadow: 0 18px 60px rgba(91, 48, 68, .10);
   color-scheme: light;
 }
 
@@ -19,11 +19,39 @@ html { scroll-behavior: smooth; scroll-padding-top: 28px; }
 body {
   margin: 0;
   color: var(--ink);
+  position: relative;
+  isolation: isolate;
   background:
-    radial-gradient(circle at 88% 4%, rgba(255, 207, 87, .22), transparent 25rem),
-    radial-gradient(circle at 4% 24%, rgba(52, 87, 213, .10), transparent 28rem),
+    radial-gradient(circle at 88% 4%, rgba(235, 154, 179, .22), transparent 25rem),
+    radial-gradient(circle at 4% 24%, rgba(198, 79, 115, .10), transparent 28rem),
     var(--paper);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body::before,
+body::after {
+  position: fixed;
+  z-index: -1;
+  color: rgba(198, 79, 115, .065);
+  font-family: Georgia, serif;
+  line-height: 2.4;
+  letter-spacing: .55em;
+  white-space: pre-wrap;
+  pointer-events: none;
+  user-select: none;
+}
+body::before {
+  content: "♥  ♡  ♥  ♡  ♥\A  ♡  ♥  ♡  ♥  ♡\A♥  ♡  ♥  ♡  ♥\A  ♡  ♥  ♡  ♥  ♡";
+  top: 5vh;
+  left: 3vw;
+  font-size: clamp(22px, 3vw, 42px);
+  transform: rotate(-8deg);
+}
+body::after {
+  content: "♡  ♥  ♡  ♥\A♥  ♡  ♥  ♡\A  ♡  ♥  ♡  ♥";
+  right: 2vw;
+  bottom: 4vh;
+  font-size: clamp(20px, 2.6vw, 38px);
+  transform: rotate(9deg);
 }
 body.modal-open { overflow: hidden; }
 .welcome-modal[hidden] { display: none; }
@@ -110,7 +138,7 @@ body.modal-open { overflow: hidden; }
 button, input { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, input:focus-visible {
-  outline: 3px solid rgba(52, 87, 213, .28);
+  outline: 3px solid rgba(198, 79, 115, .28);
   outline-offset: 2px;
 }
 .sr-only {
@@ -154,7 +182,7 @@ button:focus-visible, input:focus-visible {
   top: 0;
   height: 100vh;
   padding: 30px 20px;
-  background: #172033;
+  background: #452c3c;
   border: 0;
   display: flex;
   flex-direction: column;
@@ -220,9 +248,9 @@ button:focus-visible, input:focus-visible {
   padding: clamp(28px, 5vw, 64px);
   align-items: center;
   gap: clamp(30px, 6vw, 90px);
-  border: 1px solid rgba(52, 87, 213, .10);
+  border: 1px solid rgba(198, 79, 115, .10);
   border-radius: 32px;
-  background: linear-gradient(135deg, #fff 0%, #f2f6ff 62%, #fff9e8 100%);
+  background: linear-gradient(135deg, #fff 0%, #fff1f5 62%, #fff8fa 100%);
   box-shadow: var(--shadow);
 }
 .eyebrow {
@@ -264,7 +292,7 @@ button:focus-visible, input:focus-visible {
   color: white;
   border-color: var(--brand);
   background: var(--brand);
-  box-shadow: 0 9px 24px rgba(52, 87, 213, .22);
+  box-shadow: 0 9px 24px rgba(198, 79, 115, .22);
 }
 .pill-btn:hover, .start-btn:hover, .action-btn.primary:hover {
   background: var(--brand-dark);
@@ -284,15 +312,15 @@ button:focus-visible, input:focus-visible {
   padding: 28px;
   border: 0;
   border-radius: 24px;
-  background: #172033;
-  box-shadow: 0 18px 42px rgba(23, 32, 51, .20);
+  background: #5a3448;
+  box-shadow: 0 18px 42px rgba(90, 52, 72, .20);
   transform: none;
 }
 .crystal { display: none; }
 .progress-title { color: white; font-size: 19px; }
 .progress-title::before { content: "Haftalık hedef · "; color: var(--accent); }
 .progress-track { height: 10px; background: rgba(255,255,255,.12); }
-.progress-fill { background: linear-gradient(90deg, var(--accent), #ffe9a3); box-shadow: none; }
+.progress-fill { background: linear-gradient(90deg, #efa4ba, #ffdce6); box-shadow: none; }
 .progress-meta { color: #bdc6d8; }
 .progress-meta strong, .progress-meta b { color: white; }
 .progress-reset {
@@ -317,7 +345,7 @@ button:focus-visible, input:focus-visible {
   border: 1px solid var(--line);
   border-radius: 17px;
   background: rgba(255,255,255,.88);
-  box-shadow: 0 12px 30px rgba(28,39,67,.08);
+  box-shadow: 0 12px 30px rgba(91,48,68,.08);
   backdrop-filter: blur(14px);
 }
 .search-wrap { min-width: 220px; }
@@ -327,15 +355,15 @@ button:focus-visible, input:focus-visible {
   border-color: var(--line);
   background: #fff;
 }
-.ghost-btn:hover { color: var(--brand); border-color: rgba(52,87,213,.35); }
+.ghost-btn:hover { color: var(--brand); border-color: rgba(198,79,115,.35); }
 .section-head { margin: 30px 0 14px; }
 .section-title { color: var(--ink); font-size: 14px; }
 .section-line { background: var(--line); }
 .section-count { color: var(--muted); }
 .level-badge {
   color: var(--brand);
-  border-color: rgba(52,87,213,.18);
-  background: rgba(52,87,213,.08);
+  border-color: rgba(198,79,115,.18);
+  background: rgba(198,79,115,.08);
 }
 .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .level-card {
@@ -348,15 +376,15 @@ button:focus-visible, input:focus-visible {
   box-shadow: none;
 }
 .level-card:hover {
-  border-color: rgba(52,87,213,.42);
+  border-color: rgba(198,79,115,.42);
   background: var(--surface);
-  box-shadow: 0 12px 32px rgba(28,39,67,.09);
+  box-shadow: 0 12px 32px rgba(91,48,68,.09);
   transform: translateY(-2px);
 }
 .level-card.is-active {
   border-color: var(--brand);
   background: var(--surface-soft);
-  box-shadow: 0 0 0 3px rgba(52,87,213,.10);
+  box-shadow: 0 0 0 3px rgba(198,79,115,.10);
 }
 .level-card.is-locked { opacity: .54; filter: grayscale(.25); }
 .level-card.is-done { border-color: #9fd9be; background: #f1fbf6; }
@@ -374,9 +402,16 @@ button:focus-visible, input:focus-visible {
   background: var(--surface);
   box-shadow: var(--shadow);
 }
+.lesson-panel::before {
+  content: "♡";
+  float: right;
+  color: rgba(198,79,115,.32);
+  font-size: 28px;
+  line-height: 1;
+}
 .lesson-panel h2 { color: var(--ink); font-size: 29px; }
 .panel-label, .goal, .step p { color: var(--muted); }
-.level-pill { color: var(--brand); border-color: rgba(52,87,213,.2); background: var(--surface-soft); }
+.level-pill { color: var(--brand); border-color: rgba(198,79,115,.2); background: var(--surface-soft); }
 .timeline::before { background: var(--line); }
 .step-ico { color: var(--brand); border-color: var(--line); background: var(--surface-soft); }
 .step h4 { color: var(--ink); }
@@ -406,7 +441,7 @@ button:focus-visible, input:focus-visible {
   border: 1px solid var(--line);
   border-radius: 16px;
   background: rgba(255,255,255,.92);
-  box-shadow: 0 10px 28px rgba(28,39,67,.08);
+  box-shadow: 0 10px 28px rgba(91,48,68,.08);
   backdrop-filter: blur(14px);
 }
 .lesson-tab {
@@ -435,10 +470,15 @@ button:focus-visible, input:focus-visible {
 }
 .content-card { border-radius: 20px; }
 .content-card h3, .question h4, .vocab strong { color: var(--ink); }
+.content-card h3::after {
+  content: "  ♡";
+  color: rgba(198,79,115,.28);
+  font-size: .78em;
+}
 .content-card p, .vocab .tr, .vocab .ex, .goal { color: var(--muted); }
 .objective-list li::marker { color: var(--brand); }
-.formula:hover { color: var(--brand); border-color: rgba(52,87,213,.35); background: var(--surface-soft); }
-.speak-btn { color: var(--brand); border-color: rgba(52,87,213,.18); background: var(--surface-soft); }
+.formula:hover { color: var(--brand); border-color: rgba(198,79,115,.35); background: var(--surface-soft); }
+.speak-btn { color: var(--brand); border-color: rgba(198,79,115,.18); background: var(--surface-soft); }
 .word-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -453,7 +493,7 @@ button:focus-visible, input:focus-visible {
   background: white;
   cursor: pointer;
 }
-.word-actions button:hover { color: var(--brand); border-color: rgba(52,87,213,.32); }
+.word-actions button:hover { color: var(--brand); border-color: rgba(198,79,115,.32); }
 .word-actions button.active { color: white; border-color: var(--brand); background: var(--brand); }
 .vocab.word-known { border-color: #9fd9be; background: #f1fbf6; }
 .vocab.word-review { border-color: #eed181; background: #fffaf0; }
@@ -488,7 +528,7 @@ button:focus-visible, input:focus-visible {
   margin: 12px 8px 0 0;
   padding: 0 13px;
   color: var(--brand);
-  border: 1px solid rgba(52,87,213,.22);
+  border: 1px solid rgba(198,79,115,.22);
   border-radius: 10px;
   background: var(--surface-soft);
   font-weight: 750;
@@ -499,7 +539,7 @@ button:focus-visible, input:focus-visible {
 .capstone {
   margin-top: 18px;
   padding: 18px;
-  border: 1px solid rgba(52,87,213,.2);
+  border: 1px solid rgba(198,79,115,.2);
   border-radius: 16px;
   background: var(--surface-soft);
 }
@@ -525,7 +565,7 @@ button:focus-visible, input:focus-visible {
   border-top: 1px solid var(--line);
 }
 .option { color: var(--ink); border-color: var(--line); background: white; }
-.option:hover { border-color: rgba(52,87,213,.35); background: var(--surface-soft); }
+.option:hover { border-color: rgba(198,79,115,.35); background: var(--surface-soft); }
 .option.correct { border-color: #69bd94; background: #eaf9f1; }
 .option.wrong { border-color: #e08d8d; background: #fff0f0; }
 .question-feedback {
@@ -549,11 +589,11 @@ button:focus-visible, input:focus-visible {
   border: 1px solid var(--line);
   border-radius: 16px;
   background: rgba(255,255,255,.94);
-  box-shadow: 0 14px 36px rgba(28,39,67,.12);
+  box-shadow: 0 14px 36px rgba(91,48,68,.12);
   backdrop-filter: blur(12px);
 }
 .action-btn { color: var(--ink); border-color: var(--line); background: #fff; }
-.toast { color: white; border: 0; background: #172033; }
+.toast { color: white; border: 0; background: #5a3448; }
 
 @media (max-width: 1100px) {
   .app-frame { grid-template-columns: 92px minmax(0, 1fr); }
