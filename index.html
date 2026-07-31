@@ -6,6 +6,13 @@
   <title>Learn English — Premium Workbook</title>
   <meta name="description" content="Sıfırdan A2 seviyesine, kısa dersler ve pratiklerle kolay İngilizce öğren." />
   <meta name="theme-color" content="#172033" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="English, made easy." />
+  <meta property="og:description" content="A0'dan A2'ye 30 adımda İngilizce öğren." />
+  <meta property="og:url" content="https://divinazekeriyakoy.com/" />
+  <meta property="og:image" content="https://divinazekeriyakoy.com/assets/og-card.png" />
+  <meta property="og:image:width" content="1536" />
+  <meta property="og:image:height" content="1024" />
   <style>
     :root{
       --bg:#050913;
@@ -7699,13 +7706,7 @@ const COURSE = [
     });
 
     document.getElementById("readEnglish").addEventListener("click", () => {
-      const lesson = getCurrentLesson();
-      const text = [
-        "Hello. Welcome to your English lesson.",
-        ...lesson.formulas.slice(0, 4).map(getEnglishSpeechText),
-        lesson.reading.text
-      ].join(" ");
-      speakEnglish(text);
+      startLesson();
     });
     document.getElementById("printPage").addEventListener("click", () => window.print());
     document.getElementById("clearSearch").addEventListener("click", () => { el.search.value = ""; renderLevelSections(); });
@@ -8090,6 +8091,9 @@ const COURSE = [
     function scrollToArea(area){
       const map = { top:"top", levels:"levels", workspace:"workspace", progress:"progress", vocab:"vocab-section" };
       const target = document.getElementById(map[area] || area);
+      document.querySelectorAll("[data-scroll]").forEach(button => {
+        button.classList.toggle("active", button.dataset.scroll === area);
+      });
       if (target) target.scrollIntoView({ behavior:"smooth", block:"start" });
     }
     let toastTimer;
