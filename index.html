@@ -557,6 +557,17 @@
 </head>
 <body>
   <a class="skip-link" href="#workspace">Ders çalışma alanına geç</a>
+  <div class="welcome-modal" id="welcomeModal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeMessage" hidden>
+    <div class="welcome-backdrop" data-close-welcome></div>
+    <section class="welcome-card">
+      <div class="heart-cloud" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span></div>
+      <div class="welcome-kicker">Sana küçük bir not</div>
+      <h2 id="welcomeTitle">Güzeller güzeli sevgilimm, hoş geldin!</h2>
+      <p id="welcomeMessage">Senii çoooook seviyorum. İyi ki varsın; şimdi güzelce dersini çalış.</p>
+      <div class="welcome-sign" aria-hidden="true">♥</div>
+      <button type="button" class="welcome-button" id="closeWelcome">Ben de seni seviyorum ♥</button>
+    </section>
+  </div>
   <div class="app-frame">
     <aside class="sidebar" aria-label="Ana menü">
       <div class="brand-icon" title="Easy English">E.</div>
@@ -573,7 +584,7 @@
       <section class="top-grid">
         <div>
           <div class="eyebrow">A0'DAN A2'YE · 45 ADIM</div>
-          <h1 class="title">English,<br>made easy<span class="spark">.</span></h1>
+          <h1 class="title">English,<br>made easy<span class="spark">.</span><span class="love-spark" aria-hidden="true">♥</span></h1>
           <p class="subtitle">Kısa anlatımlar, gerçek hayattan örnekler ve bol pratik. Nerede kaldığını düşünmeden, sıradaki küçük adımı tamamla.</p>
           <div class="hero-actions">
             <button class="pill-btn" id="readEnglish"><span>▶</span><span>Bugünkü derse başla</span></button>
@@ -7677,6 +7688,34 @@ const COURSE = [
       weeklyDays: document.getElementById("weeklyDays"),
       toast: document.getElementById("toast")
     };
+    const welcome = {
+      modal: document.getElementById("welcomeModal"),
+      close: document.getElementById("closeWelcome")
+    };
+    let focusBeforeWelcome = null;
+
+    function openWelcome(){
+      focusBeforeWelcome = document.activeElement;
+      welcome.modal.hidden = false;
+      document.body.classList.add("modal-open");
+      requestAnimationFrame(() => welcome.close.focus());
+    }
+    function closeWelcome(){
+      welcome.modal.hidden = true;
+      document.body.classList.remove("modal-open");
+      if (focusBeforeWelcome && typeof focusBeforeWelcome.focus === "function") focusBeforeWelcome.focus();
+    }
+    welcome.close.addEventListener("click", closeWelcome);
+    welcome.modal.addEventListener("click", event => {
+      if (event.target.closest("[data-close-welcome]")) closeWelcome();
+    });
+    document.addEventListener("keydown", event => {
+      if (welcome.modal.hidden) return;
+      if (event.key === "Escape") return closeWelcome();
+      if (event.key !== "Tab") return;
+      event.preventDefault();
+      welcome.close.focus();
+    });
 
     el.studentName.value = localStorage.getItem(NAME_KEY) || "";
     el.studentName.addEventListener("input", () => {
@@ -8326,6 +8365,7 @@ const COURSE = [
     }
     function renderAll(){ renderStats(); renderStudyStats(); renderLevelSections(); renderPanel(); renderWorkspace(); }
     renderAll();
+    openWelcome();
   </script>
 </body>
 </html>
