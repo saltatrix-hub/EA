@@ -333,7 +333,7 @@ button:focus-visible, input:focus-visible {
 .lesson-tab:hover { color: var(--ink); background: #f3f5f8; }
 .lesson-tab.active { color: white; background: var(--brand); }
 .lesson-pane { display: none; }
-.lesson-pane.active { display: grid; animation: pane-in .22s ease both; }
+.lesson-pane.active { display: block; animation: pane-in .22s ease both; }
 @keyframes pane-in { from { opacity: 0; transform: translateY(6px); } }
 
 .content-grid { gap: 16px; }
@@ -393,6 +393,19 @@ button:focus-visible, input:focus-visible {
 .practice-feedback.model { color: #805b00; }
 .practice-feedback.needs-answer { color: var(--danger); }
 .practice-check { margin-top: 16px; }
+.speaking-practice {
+  min-height: 40px;
+  margin: 12px 8px 0 0;
+  padding: 0 13px;
+  color: var(--brand);
+  border: 1px solid rgba(52,87,213,.22);
+  border-radius: 10px;
+  background: var(--surface-soft);
+  font-weight: 750;
+  cursor: pointer;
+}
+.speaking-practice.done { color: var(--ink); border-color: var(--line); background: white; }
+.speaking-practice.completed { color: #176c44; border-color: #9fd9be; background: #ecfaf3; }
 .capstone {
   margin-top: 18px;
   padding: 18px;

@@ -7741,6 +7741,9 @@ const COURSE = [
 
       const revealReading = event.target.closest("[data-reveal-reading]");
       if (revealReading) return revealListeningText();
+
+      const speakingDone = event.target.closest("[data-speaking-done]");
+      if (speakingDone) return completeSpeakingPractice(speakingDone);
     });
 
     document.getElementById("readEnglish").addEventListener("click", () => {
@@ -7996,13 +7999,17 @@ const COURSE = [
           <div class="speaker">${escapeHtml(d.speaker).slice(0,2)}</div>
           <p><b>${escapeHtml(d.speaker)}:</b> ${escapeHtml(d.line)} <button class="speak-btn" data-speak="${escapeAttr(d.line)}" title="English voice">🔊</button></p>
         </div>`).join("");
-      const drillsHtml = lesson.drills.map((d, i) => `
-        <div class="drill" data-drill="${i}" data-model-answer="${escapeAttr(d.answer)}">
+      const drillsHtml = lesson.drills.map((d, i) => {
+        const speakingTask = /sesli tekrar/i.test(d.task);
+        return `
+        <div class="drill" data-drill="${i}" data-model-answer="${escapeAttr(d.answer)}" data-drill-type="${speakingTask ? "speaking" : "written"}">
           <b>${i+1}. ${escapeHtml(d.task)}</b>
-          <label class="sr-only" for="practice_${lesson.id}_${i}">${escapeHtml(d.task)}</label>
-          <input class="practice-input" id="practice_${lesson.id}_${i}" data-practice-input autocomplete="off" placeholder="Cevabını yaz..." />
+          ${speakingTask
+            ? `<button type="button" class="speaking-practice" data-speak="${escapeAttr(d.task.replace(/^.*?:\s*/, ""))}">▶ Dinle</button><button type="button" class="speaking-practice done" data-speaking-done>3 kez tekrar ettim</button>`
+            : `<input class="practice-input" id="practice_${lesson.id}_${i}" data-practice-input aria-label="${escapeAttr(d.task)}" autocomplete="off" placeholder="Cevabını yaz..." />`}
           <div class="practice-feedback" aria-live="polite"></div>
-        </div>`).join("");
+        </div>`;
+      }).join("");
       const questionsHtml = lesson.final.map((item, qi) => `
         <div class="question" data-question="${qi}">
           <h4>${qi+1}. ${escapeHtml(item.q)}</h4>
@@ -8071,7 +8078,7 @@ const COURSE = [
               </div>
             </div>
           </section>
-          <section class="content-card span-5 lesson-pane ${activeLessonTab === "practice" ? "active" : ""}" data-pane="practice">
+          <section class="content-card span-12 lesson-pane ${activeLessonTab === "practice" ? "active" : ""}" data-pane="practice">
             <h3>✍️ Bölüm İçi Pratik</h3>
             <p class="small">Cevapları kendin yaz. Kontrolden sonra örnek cevaplarla karşılaştır.</p>
             <div class="drill-grid">${drillsHtml}</div>
@@ -8085,7 +8092,7 @@ const COURSE = [
               </div>` : ""}
             <button type="button" class="action-btn primary practice-check" data-check-practice>Pratiği kontrol et</button>
           </section>
-          <section class="content-card span-7 lesson-pane ${activeLessonTab === "test" ? "active" : ""}" data-pane="test" id="test-area">
+          <section class="content-card span-12 lesson-pane ${activeLessonTab === "test" ? "active" : ""}" data-pane="test" id="test-area">
             <div class="quiz-head"><div><h3>🏁 Bölüm Sonu Testi</h3><p>Sonraki seviyeye geçmek için en az <strong>${Math.ceil(lesson.final.length * .8)}/${lesson.final.length}</strong> yapmalısın.</p></div></div>
             <form id="quizForm">${questionsHtml}</form>
             <div id="result" class="result"></div>
@@ -8134,8 +8141,6 @@ const COURSE = [
       document.querySelectorAll("[data-pane]").forEach(pane => {
         pane.classList.toggle("active", pane.dataset.pane === tab);
       });
-      if (tab === "words") document.getElementById("vocab-section")?.scrollIntoView({ behavior:"smooth", block:"start" });
-      if (tab === "test") document.getElementById("test-area")?.scrollIntoView({ behavior:"smooth", block:"start" });
     }
     function normalizeAnswer(value){
       return String(value || "")
@@ -8152,13 +8157,25 @@ const COURSE = [
       drills.forEach(drill => {
         const input = drill.querySelector("[data-practice-input]");
         const feedback = drill.querySelector(".practice-feedback");
+        if (drill.dataset.drillType === "speaking") {
+          if (drill.dataset.completed === "true") {
+            completed++;
+            feedback.className = "practice-feedback correct";
+            feedback.textContent = "✓ Sesli tekrar tamamlandı.";
+          } else {
+            feedback.className = "practice-feedback needs-answer";
+            feedback.textContent = "Cümleyi dinleyip 3 kez sesli tekrar et.";
+          }
+          return;
+        }
         const model = drill.dataset.modelAnswer || "";
         const given = normalizeAnswer(input?.value);
         const expected = normalizeAnswer(model);
         const exactEnough = given && (
           given === expected ||
           expected.split("/").some(option => normalizeAnswer(option) === given) ||
-          (given.length > 5 && expected.includes(given))
+          (given.length > 5 && expected.includes(given)) ||
+          (expected.length > 4 && given.includes(expected))
         );
         input?.classList.toggle("is-correct", !!exactEnough);
         input?.classList.toggle("needs-review", !!given && !exactEnough);
@@ -8175,6 +8192,17 @@ const COURSE = [
       });
       if (completed) recordStudy();
       showToast(`${completed}/${drills.length} alıştırmayı cevapladın.`, completed === drills.length ? "ok" : "bad");
+    }
+    function completeSpeakingPractice(button){
+      const drill = button.closest("[data-drill]");
+      const feedback = drill?.querySelector(".practice-feedback");
+      if (!drill || !feedback) return;
+      drill.dataset.completed = "true";
+      button.classList.add("completed");
+      button.textContent = "✓ Tamamlandı";
+      feedback.className = "practice-feedback correct";
+      feedback.textContent = "Harika. Sesli tekrar tamamlandı.";
+      recordStudy();
     }
     function setWordStatus(wordKey, status){
       if (!wordKey || !["review", "known"].includes(status)) return;
