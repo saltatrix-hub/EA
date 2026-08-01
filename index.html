@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Easy English — A0'dan A2'ye 45 Adım</title>
   <meta name="description" content="45 yapılandırılmış ders, aktif pratikler, kelime tekrarı, dinleme ve açıklamalı testlerle İngilizce öğren." />
-  <meta name="theme-color" content="#452c3c" />
+  <meta name="theme-color" id="themeColor" content="#1b1118" />
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem("easy_english_theme") || "dark"; }
+    catch (error) { document.documentElement.dataset.theme = "dark"; }
+  </script>
   <meta property="og:type" content="website" />
   <meta property="og:title" content="English, made easy." />
   <meta property="og:description" content="A0'dan A2'ye 45 yapılandırılmış dersle İngilizce öğren." />
@@ -568,6 +572,7 @@
       <button type="button" class="welcome-button" id="closeWelcome">Ben de seni seviyorum ♥</button>
     </section>
   </div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Açık temaya geç" aria-pressed="true"><span aria-hidden="true">☀</span><span>Açık tema</span></button>
   <div class="app-frame">
     <aside class="sidebar" aria-label="Ana menü">
       <div class="brand-icon" title="Easy English">E.</div>
@@ -7692,6 +7697,25 @@ const COURSE = [
       modal: document.getElementById("welcomeModal"),
       close: document.getElementById("closeWelcome")
     };
+    const themeToggle = document.getElementById("themeToggle");
+    const themeColor = document.getElementById("themeColor");
+    function applyTheme(theme){
+      const nextTheme = theme === "light" ? "light" : "dark";
+      document.documentElement.dataset.theme = nextTheme;
+      const dark = nextTheme === "dark";
+      themeToggle.setAttribute("aria-pressed", dark ? "true" : "false");
+      themeToggle.setAttribute("aria-label", dark ? "Açık temaya geç" : "Koyu temaya geç");
+      themeToggle.innerHTML = dark
+        ? '<span aria-hidden="true">☀</span><span>Açık tema</span>'
+        : '<span aria-hidden="true">☾</span><span>Koyu tema</span>';
+      themeColor.content = dark ? "#1b1118" : "#452c3c";
+    }
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      applyTheme(nextTheme);
+      try { localStorage.setItem("easy_english_theme", nextTheme); } catch (error) {}
+    });
+    applyTheme(document.documentElement.dataset.theme || "dark");
     let focusBeforeWelcome = null;
 
     function openWelcome(){
